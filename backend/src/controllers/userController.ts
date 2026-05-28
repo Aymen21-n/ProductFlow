@@ -26,7 +26,7 @@ export async function bloquerUser(
       return
     }
 
-    user.actif = false
+    user.actif = !user.actif
     await user.save()
 
     res.json(user)
