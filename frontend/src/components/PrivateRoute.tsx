@@ -11,6 +11,8 @@ interface PrivateRouteProps {
 export function PrivateRoute({ children, role }: PrivateRouteProps) {
   const { state } = useAuth()
 
+  console.log('PrivateRoute state:', state)
+
   if (!state.user || !state.token) {
     return <Navigate to="/login" replace />
   }
