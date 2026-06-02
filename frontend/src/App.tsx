@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import PrivateRoute from './components/PrivateRoute'
+import AdminLayout from './components/layout/AdminLayout'
 import Login from './features/auth/Login'
 import Dashboard from './pages/admin/Dashboard'
 import Produits from './pages/admin/Produits'
@@ -21,45 +22,20 @@ function App() {
       <Route path="/unauthorized" element={<Unauthorized />} />
 
       <Route
-        path="/admin/dashboard"
+        path="/admin"
         element={
           <PrivateRoute role="admin">
-            <Dashboard />
+            <AdminLayout />
           </PrivateRoute>
         }
-      />
-      <Route
-        path="/admin/produits"
-        element={
-          <PrivateRoute role="admin">
-            <Produits />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/admin/commandes"
-        element={
-          <PrivateRoute role="admin">
-            <CommandesAdmin />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/admin/factures"
-        element={
-          <PrivateRoute role="admin">
-            <FacturesAdmin />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/admin/utilisateurs"
-        element={
-          <PrivateRoute role="admin">
-            <Utilisateurs />
-          </PrivateRoute>
-        }
-      />
+      >
+        <Route index element={<Navigate to="/admin/dashboard" replace />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="produits" element={<Produits />} />
+        <Route path="commandes" element={<CommandesAdmin />} />
+        <Route path="factures" element={<FacturesAdmin />} />
+        <Route path="utilisateurs" element={<Utilisateurs />} />
+      </Route>
 
       <Route
         path="/user/catalogue"

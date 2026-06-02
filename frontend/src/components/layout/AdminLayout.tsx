@@ -6,7 +6,7 @@ import styles from './AdminLayout.module.css'
 function AdminLayout() {
   return (
     <div className={styles.layout}>
-      <Navbar />
+      <Navbar offsetForSidebar />
 
       <div className={styles.body}>
         <div className={styles.sidebarSlot}>

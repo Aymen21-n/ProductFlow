@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   HiOutlineCube,
+  HiOutlineDocumentText,
   HiOutlineExclamationCircle,
   HiOutlineShoppingCart,
   HiOutlineUsers,
 } from 'react-icons/hi'
 import { PiCurrencyCircleDollarBold } from 'react-icons/pi'
 import api from '../../../api/axios'
-import Button from '../../../components/ui/Button'
 import type { Commande, Produit, User } from '../../../types'
 import styles from './index.module.css'
 
@@ -88,117 +89,172 @@ function Dashboard() {
       value: formatNumber(totalCommandes),
       note: 'Toutes les commandes enregistrees',
       icon: HiOutlineShoppingCart,
-      tone: styles.blueCard,
+      tone: styles.blueAccent,
     },
     {
       label: 'Revenus totaux',
       value: formatAmount(totalRevenus),
       note: 'Somme des montantTotal cumules',
       icon: PiCurrencyCircleDollarBold,
-      tone: styles.greenCard,
+      tone: styles.greenAccent,
     },
     {
       label: 'Stock faible',
       value: formatNumber(stockFaible),
       note: 'Produits avec un stock inferieur a 5',
       icon: HiOutlineExclamationCircle,
-      tone: styles.orangeCard,
+      tone: styles.orangeAccent,
     },
     {
       label: 'Utilisateurs',
       value: formatNumber(totalUtilisateurs),
       note: 'Comptes utilisateurs disponibles',
       icon: HiOutlineUsers,
-      tone: styles.purpleCard,
+      tone: styles.slateAccent,
+    },
+  ]
+
+  const quickLinks = [
+    {
+      label: 'Produits',
+      description: 'Ajouter, modifier ou supprimer les produits du catalogue.',
+      to: '/admin/produits',
+      icon: HiOutlineCube,
+    },
+    {
+      label: 'Commandes',
+      description: 'Consulter et suivre les commandes passees.',
+      to: '/admin/commandes',
+      icon: HiOutlineShoppingCart,
+    },
+    {
+      label: 'Factures',
+      description: 'Acceder aux factures generees pour les commandes.',
+      to: '/admin/factures',
+      icon: HiOutlineDocumentText,
+    },
+    {
+      label: 'Utilisateurs',
+      description: 'Gerer les comptes, roles et statuts utilisateurs.',
+      to: '/admin/utilisateurs',
+      icon: HiOutlineUsers,
     },
   ]
 
   return (
-    <section className={styles.page}>
-      <div className={styles.hero}>
+    <main className={styles.page}>
+      <header className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>Vue d'ensemble</p>
-          <h1 className={styles.title}>Dashboard administrateur</h1>
-          <p className={styles.subtitle}>
-            Suivez les indicateurs cles de ProduitFlow en un coup d'oeil.
-          </p>
+          <p className={styles.kicker}>Administration</p>
+          <h1>Dashboard administrateur</h1>
         </div>
 
-        <div className={styles.heroMeta}>
-          <span className={styles.metaChip}>
-            <HiOutlineCube className={styles.metaIcon} />
-            {loading ? 'Synchronisation en cours' : 'Donnees chargees'}
-          </span>
-
-          {!loading && !error && (
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setRefreshIndex((value) => value + 1)}
-            >
-              Actualiser
-            </Button>
-          )}
-        </div>
-      </div>
+        {!loading && !error && (
+          <button
+            className={styles.primaryButton}
+            type="button"
+            onClick={() => setRefreshIndex((value) => value + 1)}
+          >
+            Actualiser
+          </button>
+        )}
+      </header>
 
       {error ? (
-        <div className={styles.errorCard} role="alert">
-          <div className={styles.errorContent}>
-            <span className={styles.errorIconWrap}>
-              <HiOutlineExclamationCircle className={styles.errorIcon} />
-            </span>
+        <section className={styles.errorPanel} role="alert">
+          <p className={styles.error}>{error}</p>
+
+          <button
+            className={styles.primaryButton}
+            type="button"
+            onClick={() => setRefreshIndex((value) => value + 1)}
+          >
+            Reessayer
+          </button>
+        </section>
+      ) : (
+        <section className={styles.statsPanel}>
+          <div className={styles.panelHeader}>
             <div>
-              <h2 className={styles.errorTitle}>Chargement interrompu</h2>
-              <p className={styles.errorMessage}>{error}</p>
+              <h2>Indicateurs cles</h2>
+              <p>Vue d'ensemble des donnees principales de ProduitFlow.</p>
             </div>
+
+            <span className={styles.statusChip}>
+              <HiOutlineCube className={styles.statusIcon} />
+              {loading ? 'Synchronisation en cours' : 'Donnees chargees'}
+            </span>
           </div>
 
-          <Button onClick={() => setRefreshIndex((value) => value + 1)}>
-            Reessayer
-          </Button>
+          <div className={styles.grid}>
+            {stats.map((stat, index) => {
+              const Icon = stat.icon
+
+              return (
+                <article
+                  key={stat.label}
+                  className={`${styles.card} ${stat.tone}`}
+                >
+                  {loading ? (
+                    <>
+                      <div className={styles.cardTop}>
+                        <span className={styles.skeletonIcon} />
+                        <span className={styles.skeletonLineShort} />
+                      </div>
+                      <span className={styles.skeletonValue} />
+                      <span
+                        className={styles.skeletonLine}
+                        style={{ width: `${68 + (index % 2) * 10}%` }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <div className={styles.cardTop}>
+                        <span className={styles.iconWrap}>
+                          <Icon className={styles.cardIcon} />
+                        </span>
+                        <span className={styles.cardLabel}>{stat.label}</span>
+                      </div>
+
+                      <strong className={styles.cardValue}>{stat.value}</strong>
+                      <p className={styles.cardNote}>{stat.note}</p>
+                    </>
+                  )}
+                </article>
+              )
+            })}
+          </div>
+        </section>
+      )}
+
+      <section className={styles.quickLinksPanel}>
+        <div className={styles.panelHeader}>
+          <div>
+            <h2>Acces rapides</h2>
+            <p>Ouvrez directement les espaces de gestion admin.</p>
+          </div>
         </div>
-      ) : (
-        <div className={styles.grid}>
-          {stats.map((stat, index) => {
-            const Icon = stat.icon
+
+        <div className={styles.quickGrid}>
+          {quickLinks.map((item) => {
+            const Icon = item.icon
 
             return (
-              <article
-                key={stat.label}
-                className={`${styles.card} ${stat.tone}`}
-              >
-                {loading ? (
-                  <>
-                    <div className={styles.cardTop}>
-                      <span className={styles.skeletonIcon} />
-                      <span className={styles.skeletonLineShort} />
-                    </div>
-                    <span className={styles.skeletonValue} />
-                    <span
-                      className={styles.skeletonLine}
-                      style={{ width: `${68 + (index % 2) * 10}%` }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <div className={styles.cardTop}>
-                      <span className={styles.iconWrap}>
-                        <Icon className={styles.cardIcon} />
-                      </span>
-                      <span className={styles.cardLabel}>{stat.label}</span>
-                    </div>
-
-                    <strong className={styles.cardValue}>{stat.value}</strong>
-                    <p className={styles.cardNote}>{stat.note}</p>
-                  </>
-                )}
-              </article>
+              <Link key={item.to} className={styles.quickCard} to={item.to}>
+                <span className={styles.quickIcon} aria-hidden="true">
+                  <Icon />
+                </span>
+                <span className={styles.quickContent}>
+                  <strong>{item.label}</strong>
+                  <span>{item.description}</span>
+                </span>
+                <span className={styles.quickAction}>Ouvrir</span>
+              </Link>
             )
           })}
         </div>
-      )}
-    </section>
+      </section>
+    </main>
   )
 }
 

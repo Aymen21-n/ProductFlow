@@ -4,6 +4,10 @@ import { useAuth } from '../../features/auth/AuthContext'
 import type { User } from '../../types'
 import styles from './Navbar.module.css'
 
+interface NavbarProps {
+  offsetForSidebar?: boolean
+}
+
 interface NavigationItem {
   label: string
   to: string
@@ -30,7 +34,7 @@ const roleLabel: Record<User['role'], string> = {
   user: 'User',
 }
 
-function Navbar() {
+function Navbar({ offsetForSidebar = false }: NavbarProps) {
   const { state, dispatch } = useAuth()
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -54,7 +58,11 @@ function Navbar() {
   }
 
   return (
-    <header className={styles.header}>
+    <header
+      className={`${styles.header} ${
+        offsetForSidebar ? styles.headerWithSidebar : ''
+      }`.trim()}
+    >
       <div className={styles.shell}>
         <NavLink
           to={homeLink}
