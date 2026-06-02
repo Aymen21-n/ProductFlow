@@ -1,36 +1,30 @@
 import api from '../api/axios'
 import type { Produit } from '../types'
 
-export type CreateProduitData = Omit<Produit, 'id'>
-export type UpdateProduitData = Partial<CreateProduitData>
+export async function getProduits(): Promise<Produit[]> {
+  try {
+    const response = await api.get<Produit[]>('/produits')
 
-export async function getAllProduits(): Promise<Produit[]> {
-  const response = await api.get<Produit[]>('/produits')
-
-  return response.data
+    return response.data
+  } catch (error) {
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : 'Impossible de recuperer les produits.',
+    )
+  }
 }
 
 export async function getProduitById(id: string): Promise<Produit> {
-  const response = await api.get<Produit>(`/produits/${id}`)
+  try {
+    const response = await api.get<Produit>(`/produits/${id}`)
 
-  return response.data
-}
-
-export async function createProduit(data: CreateProduitData): Promise<Produit> {
-  const response = await api.post<Produit>('/produits', data)
-
-  return response.data
-}
-
-export async function updateProduit(
-  id: string,
-  data: UpdateProduitData,
-): Promise<Produit> {
-  const response = await api.put<Produit>(`/produits/${id}`, data)
-
-  return response.data
-}
-
-export async function deleteProduit(id: string): Promise<void> {
-  await api.delete(`/produits/${id}`)
+    return response.data
+  } catch (error) {
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : `Impossible de recuperer le produit ${id}.`,
+    )
+  }
 }
