@@ -1,0 +1,110 @@
+.wrapper {
+  overflow-x: auto;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 1.4rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
+  box-shadow:
+    0 22px 44px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.84);
+}
+
+.table {
+  width: 100%;
+  min-width: 42rem;
+  border-collapse: collapse;
+}
+
+.head {
+  background:
+    linear-gradient(180deg, rgba(241, 245, 249, 0.94), rgba(248, 250, 252, 0.94));
+}
+
+.headerCell {
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.96);
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.body {
+  color: #0f172a;
+}
+
+.row {
+  transition: background-color 0.2s ease;
+}
+
+.row:hover {
+  background: rgba(226, 232, 240, 0.26);
+}
+
+.rowAlt {
+  background: rgba(248, 250, 252, 0.74);
+}
+
+.cell {
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid rgba(241, 245, 249, 0.96);
+  font-size: 0.94rem;
+  vertical-align: middle;
+}
+
+.row:last-child .cell {
+  border-bottom: none;
+}
+
+.placeholder {
+  color: #94a3b8;
+}
+
+.emptyRow {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.emptyCell {
+  padding: 2.5rem 1.25rem;
+  color: #64748b;
+  font-size: 0.96rem;
+  text-align: center;
+}
+
+.skeleton {
+  display: inline-flex;
+  height: 0.95rem;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(226, 232, 240, 0.9), rgba(241, 245, 249, 1), rgba(226, 232, 240, 0.9));
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .table {
+    min-width: 34rem;
+  }
+
+  .headerCell,
+  .cell {
+    padding: 0.9rem 0.95rem;
+  }
+
+  .emptyCell {
+    padding: 2rem 1rem;
+  }
+}
