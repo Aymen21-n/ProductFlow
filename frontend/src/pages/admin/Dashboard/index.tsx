@@ -76,10 +76,9 @@ function Dashboard() {
   }, [refreshIndex])
 
   const totalCommandes = commandes.length
-  const totalRevenus = commandes.reduce(
-    (total, commande) => total + commande.montantTotal,
-    0,
-  )
+  const totalRevenus = commandes
+    .filter((commande) => commande.statut === 'approuvee')
+    .reduce((total, commande) => total + commande.montantTotal, 0)
   const stockFaible = produits.filter((produit) => produit.stock < 5).length
   const totalUtilisateurs = users.length
 

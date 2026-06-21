@@ -2,6 +2,7 @@ import type { Response } from 'express'
 import type { AuthRequest } from '../middleware/auth'
 import Commande, { type StatutCommande } from '../models/Commande'
 import Facture from '../models/Facture'
+import Produit from '../models/Produit'
 
 async function createFactureFromCommande(commandeId: string): Promise<void> {
   const commande = await Commande.findById(commandeId)
@@ -30,7 +31,9 @@ export async function getAllCommandes(
   res: Response,
 ): Promise<void> {
   try {
-    const commandes = await Commande.find().sort({ createdAt: -1 })
+    const commandes = await Commande.find()
+      .populate('userId', 'nom')
+      .sort({ date: -1 })
     res.json(commandes)
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur', error })
@@ -91,6 +94,12 @@ export async function updateStatutCommande(
     }
 
     if (statut === 'approuvee') {
+      for (const ligne of commande.lignes) {
+        await Produit.findByIdAndUpdate(ligne.produitId, {
+          $inc: { stock: -ligne.quantite },
+        })
+      }
+
       await createFactureFromCommande(commande.id)
     }
 

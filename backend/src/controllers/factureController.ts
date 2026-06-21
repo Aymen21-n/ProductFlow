@@ -7,7 +7,9 @@ export async function getAllFactures(
   res: Response,
 ): Promise<void> {
   try {
-    const factures = await Facture.find().sort({ createdAt: -1 })
+    const factures = await Facture.find()
+      .populate('userId', 'nom')
+      .sort({ date: -1 })
     res.json(factures)
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur', error })
@@ -19,9 +21,9 @@ export async function getFacturesByUser(
   res: Response,
 ): Promise<void> {
   try {
-    const factures = await Facture.find({ userId: req.params.userId }).sort({
-      createdAt: -1,
-    })
+    const factures = await Facture.find({ userId: req.params.userId })
+      .populate('userId', 'nom')
+      .sort({ date: -1 })
     res.json(factures)
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur', error })

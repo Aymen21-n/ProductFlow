@@ -41,6 +41,10 @@ function getLineSubtotal(ligne: LignePanier) {
   return ligne.prix * ligne.quantite
 }
 
+function getUserNom(userId: string | { _id: string; nom: string }): string {
+  return typeof userId === 'object' ? userId.nom : userId
+}
+
 export default function FacturesAdmin() {
   const { state } = useAuth()
   const [factures, setFactures] = useState<Facture[]>([])
@@ -89,7 +93,7 @@ export default function FacturesAdmin() {
     }
 
     return factures.filter((facture) =>
-      facture.userId.toLowerCase().includes(normalizedFilter),
+      getUserNom(facture.userId).toLowerCase().includes(normalizedFilter),
     )
   }, [factures, filterUser])
 
@@ -132,7 +136,7 @@ export default function FacturesAdmin() {
                 <tr>
                   <th>ID facture</th>
                   <th>Date</th>
-                  <th>UserId</th>
+                  <th>Utilisateur</th>
                   <th>Montant total</th>
                   <th>Actions</th>
                 </tr>
@@ -149,7 +153,7 @@ export default function FacturesAdmin() {
                     <tr key={facture.id}>
                       <td title={facture.id}>{formatFactureNumber(facture.id)}</td>
                       <td>{formatDate(facture.date)}</td>
-                      <td>{facture.userId}</td>
+                      <td>{getUserNom(facture.userId)}</td>
                       <td>{formatPrice(facture.montantTotal)}</td>
                       <td>
                         <button
@@ -199,7 +203,7 @@ export default function FacturesAdmin() {
               <span>Date</span>
               <strong>{formatDate(selectedFacture.date)}</strong>
               <span>UserId</span>
-              <strong>{selectedFacture.userId}</strong>
+              <strong>{getUserNom(selectedFacture.userId)}</strong>
             </div>
 
             <div className={styles.tableWrap}>

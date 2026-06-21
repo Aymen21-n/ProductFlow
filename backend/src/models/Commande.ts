@@ -1,4 +1,4 @@
-import { Schema, model, type Document } from 'mongoose'
+import { Schema, model, type Document, Types } from 'mongoose'
 
 export type StatutCommande = 'en_attente' | 'approuvee' | 'refusee'
 
@@ -11,7 +11,7 @@ export interface ILignePanier {
 }
 
 export interface ICommande extends Document {
-  userId: string
+  userId: Types.ObjectId
   lignes: ILignePanier[]
   montantTotal: number
   statut: StatutCommande
@@ -51,7 +51,8 @@ export const lignePanierSchema = new Schema<ILignePanier>(
 const commandeSchema = new Schema<ICommande>(
   {
     userId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     lignes: {
@@ -83,6 +84,15 @@ const commandeSchema = new Schema<ICommande>(
       virtuals: true,
       transform: (_doc, ret) => {
         const commande = ret as Record<string, unknown>
+        const userId = commande.userId
+
+        if (userId && typeof userId === 'object' && 'nom' in userId) {
+          const populatedUser = userId as { _id?: unknown; nom?: string }
+
+          commande.userName = populatedUser.nom
+          commande.userId = String(populatedUser._id ?? '')
+        }
+
         delete commande._id
         delete commande.__v
         return ret

@@ -121,7 +121,7 @@ export default function FacturesUser() {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Numero de facture</th>
+                  <th>Numéro de facture</th>
                   <th>Date</th>
                   <th>Montant total</th>
                   <th>Actions</th>
@@ -187,7 +187,7 @@ export default function FacturesUser() {
                   <tr>
                     <th>Image</th>
                     <th>Produit</th>
-                    <th>Quantite</th>
+                    <th>Quantité</th>
                     <th>Prix unitaire</th>
                     <th>Sous-total</th>
                   </tr>

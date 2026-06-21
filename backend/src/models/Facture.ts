@@ -1,9 +1,9 @@
-import { Schema, model, type Document } from 'mongoose'
+import { Schema, model, type Document, Types } from 'mongoose'
 import { lignePanierSchema, type ILignePanier } from './Commande'
 
 export interface IFacture extends Document {
   commandeId: string
-  userId: string
+  userId: Types.ObjectId
   montantTotal: number
   lignes: ILignePanier[]
   date: Date
@@ -17,7 +17,8 @@ const factureSchema = new Schema<IFacture>(
       unique: true,
     },
     userId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     montantTotal: {

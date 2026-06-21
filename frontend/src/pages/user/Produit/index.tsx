@@ -22,6 +22,7 @@ function Produit() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [quantite, setQuantite] = useState(1)
   const [refreshIndex, setRefreshIndex] = useState(0)
 
   useEffect(() => {
@@ -82,12 +83,14 @@ function Produit() {
       return
     }
 
-    addToCart({
-      produitId: produit.id,
-      nom: produit.nom,
-      prix: produit.prix,
-      image: produit.image,
-    })
+    for (let i = 0; i < quantite; i++) {
+      addToCart({
+        produitId: produit.id,
+        nom: produit.nom,
+        prix: produit.prix,
+        image: produit.image,
+      })
+    }
 
     setShowSuccessMessage(true)
 
@@ -199,6 +202,27 @@ function Produit() {
               Produit ajouté au panier !
             </div>
           )}
+
+          <div className={styles.quantitySelector}>
+            <span className={styles.metaLabel}>Quantité</span>
+            <div className={styles.quantityControls}>
+              <button
+                type="button"
+                onClick={() => setQuantite((q) => Math.max(1, q - 1))}
+                disabled={quantite <= 1}
+              >
+                -
+              </button>
+              <span>{quantite}</span>
+              <button
+                type="button"
+                onClick={() => setQuantite((q) => Math.min(produit.stock, q + 1))}
+                disabled={quantite >= produit.stock}
+              >
+                +
+              </button>
+            </div>
+          </div>
 
           <div className={styles.actions}>
             <Button

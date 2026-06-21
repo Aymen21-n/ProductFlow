@@ -210,7 +210,7 @@ export default function CommandesUser() {
                   <tr>
                     <th>Image</th>
                     <th>Produit</th>
-                    <th>Quantite</th>
+                    <th>Quantité</th>
                     <th>Prix unitaire</th>
                     <th>Sous-total</th>
                   </tr>

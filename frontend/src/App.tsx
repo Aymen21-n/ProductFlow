@@ -13,6 +13,7 @@ import Panier from './pages/user/Panier'
 import CommandesUser from './pages/user/Commandes'
 import FacturesUser from './pages/user/Factures'
 import Unauthorized from './pages/Unauthorized'
+import UserLayout from './components/layout/UserLayout'
 
 function App() {
   return (
@@ -37,46 +38,17 @@ function App() {
         <Route path="utilisateurs" element={<Utilisateurs />} />
       </Route>
 
-      <Route
-        path="/user/catalogue"
-        element={
-          <PrivateRoute role="user">
-            <Catalogue />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/user/produit/:id"
-        element={
-          <PrivateRoute role="user">
-            <Produit />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/user/panier"
-        element={
-          <PrivateRoute role="user">
-            <Panier />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/user/commandes"
-        element={
-          <PrivateRoute role="user">
-            <CommandesUser />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/user/factures"
-        element={
-          <PrivateRoute role="user">
-            <FacturesUser />
-          </PrivateRoute>
-        }
-      />
+        <Route
+          path="/user"
+          element={<PrivateRoute role="user"><UserLayout /></PrivateRoute>}
+        >
+          <Route index element={<Navigate to="/user/catalogue" replace />} />
+          <Route path="catalogue" element={<Catalogue />} />
+          <Route path="produit/:id" element={<Produit />} />
+          <Route path="panier" element={<Panier />} />
+          <Route path="commandes" element={<CommandesUser />} />
+          <Route path="factures" element={<FacturesUser />} />
+        </Route>
     </Routes>
   )
 }

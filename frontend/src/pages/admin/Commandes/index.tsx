@@ -109,7 +109,9 @@ export default function CommandesAdmin() {
     }
 
     return commandes.filter((commande) =>
-      commande.userId.toLowerCase().includes(normalizedFilter),
+      (commande.userName ?? commande.userId)
+        .toLowerCase()
+        .includes(normalizedFilter),
     )
   }, [commandes, filterUser])
 
@@ -183,7 +185,7 @@ export default function CommandesAdmin() {
               <thead>
                 <tr>
                   <th>Date</th>
-                  <th>UserId</th>
+                  <th>Utilisateur</th>
                   <th>Montant total</th>
                   <th>Statut</th>
                   <th>Actions</th>
@@ -200,7 +202,7 @@ export default function CommandesAdmin() {
                   filteredCommandes.map((commande) => (
                     <tr key={commande.id}>
                       <td>{formatDate(commande.date)}</td>
-                      <td>{commande.userId}</td>
+                      <td>{commande.userName ?? commande.userId}</td>
                       <td>{formatPrice(commande.montantTotal)}</td>
                       <td>
                         <span

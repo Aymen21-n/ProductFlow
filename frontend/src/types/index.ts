@@ -28,6 +28,7 @@ export interface LignePanier {
 export interface Commande {
   id: string
   userId: string
+  userName?: string
   lignes: LignePanier[]
   montantTotal: number
   statut: 'en_attente' | 'approuvee' | 'refusee'
@@ -37,7 +38,7 @@ export interface Commande {
 export interface Facture {
   id: string
   commandeId: string
-  userId: string
+  userId: string | { _id: string; nom: string }
   montantTotal: number
   lignes: LignePanier[]
   date: string
